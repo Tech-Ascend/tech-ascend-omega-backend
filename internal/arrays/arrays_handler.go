@@ -1,6 +1,7 @@
 package arrays
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,11 +23,26 @@ func (h *ArraysHandler) ContainsDuplicates(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+type SudokuBoard struct {
+	Board [][]string `json:board`
+}
+
 func (h *ArraysHandler) IsValidSudoku(c *gin.Context) {
-	var board [][]byte
-	if err := c.ShouldBindBodyWithJSON(&board); err != nil {
+	var sudokuBoard SudokuBoard
+	if err := c.ShouldBindJSON(&sudokuBoard); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
+
+	board := make([][]byte, len(sudokuBoard.Board))
+	for i, row := range sudokuBoard.Board {
+		board[i] = make([]byte, len(row))
+		for j, cell := range row {
+			board[i][j] = cell[0]
+		}
+	}
+
 	result := h.Service.IsValidSudoku(board)
+	fmt.Println(result)
 	c.JSON(http.StatusOK, result)
 }

@@ -69,7 +69,6 @@ func (arrayService *ArrayService) IsValidSudoku(board [][]byte) []SudokuFeedback
 				})
 				continue
 			}
-
 			digit := int(cell) - 49 
 
 			isValid := true
@@ -94,7 +93,7 @@ func (arrayService *ArrayService) IsValidSudoku(board [][]byte) []SudokuFeedback
 				cols[c][digit] = true
 				grid[r/3][c/3][digit] = true
 				reason = "Valid placement"
-			}
+			}			
 
 			sudokuFeedback = append(sudokuFeedback, SudokuFeedback{
 				Row:    r,
