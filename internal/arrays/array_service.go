@@ -1,5 +1,7 @@
 package arrays
 
+import "fmt"
+
 type ArrayService struct{}
 
 type Step struct {
@@ -38,4 +40,42 @@ func (arrayService *ArrayService) ContainsDuplicates(numbers []int) ContainsDupl
     }
 
     return result
+}
+type ValidAnagramResults struct {
+	ValidAnagram   bool
+	FrequencyLogs  []string
+	Report         string
+}
+
+func (arrayService *ArrayService) ValidAnagram(s string, t string) ValidAnagramResults {
+	feedback := ValidAnagramResults{
+		FrequencyLogs: []string{},
+	}
+fmt.Println(s, t)
+	if len(s) != len(t) {
+		feedback.ValidAnagram = false
+		feedback.Report = "Words do not match in length, not a valid anagram"
+		return feedback
+	}
+
+	var freq [26]int
+
+	for idx := 0; idx < len(s); idx++ {
+		freq[s[idx]-'a']++
+		freq[t[idx]-'a']--
+		feedback.FrequencyLogs = append(feedback.FrequencyLogs, "added one to "+string(s[idx]))
+		feedback.FrequencyLogs = append(feedback.FrequencyLogs, "subtracted one from "+string(t[idx]))
+	}
+
+	for idx := 0; idx < len(freq); idx++ {
+		if freq[idx] != 0 {
+			feedback.ValidAnagram = false
+			feedback.Report = "Words are not valid anagrams"
+			return feedback
+		}
+	}
+
+	feedback.ValidAnagram = true
+	feedback.Report = "Words are valid anagrams"
+	return feedback
 }

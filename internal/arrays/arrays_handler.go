@@ -21,3 +21,17 @@ func (h *ArraysHandler) ContainsDuplicates(c *gin.Context) {
 
 	c.JSON(http.StatusOK, result)
 }
+
+func (h *ArraysHandler) ValidAnagram(c *gin.Context) {
+	var strings struct {
+		S string `json:"s"`
+		T string `json:"t"`
+	}
+	if err := c.ShouldBindJSON(&strings); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	result := h.Service.ValidAnagram(strings.S, strings.T)
+	c.JSON(http.StatusOK, result)
+}
